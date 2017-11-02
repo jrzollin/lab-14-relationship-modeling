@@ -5,7 +5,10 @@ const mongoose = require('mongoose');
 
 let app = express();
 mongoose.Promise = Promise;
-mongoose.connect('mongodb://localhost:27017/expressmongo');
+mongoose.connect('mongodb://localhost:27017/expressmongo', {useMongoClient: true});
+
+app.use(require('../routes/gamesRoutes.js'));
+app.use(require('../routes/platformRoutes.js'));
 
 app.use(require('./middleware/error.js'));
 
