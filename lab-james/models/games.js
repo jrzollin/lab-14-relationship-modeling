@@ -44,7 +44,7 @@ gameSchema.pre('save', function(done){
 
 gameSchema.pre('findOne', function(done){
   this.populate({
-    path: 'platform',
+    path: 'platforms',
     populate: {
       path: 'gameList',
       populate: {
