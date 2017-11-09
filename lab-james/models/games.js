@@ -12,16 +12,16 @@ const gameSchema = mongoose.Schema({
 });
 
 gameSchema.pre('save', function(done){
-  Platform.findById(this.platform)
-    .then(passedPlatform => {
-      if(!passedPlatform){
+  Platform.findById(this.platforms)
+    .then(platform => {
+      if(!platform){
 
         return Promise.reject();
 
       } else {
 
-        this.platform = passedPlatform._id;
-        this.gameList = passedPlatform.gameList._id;
+        this.platforms = platform._id;
+        this.gameList = platform.gameList._id;
         return Promise.resolve(this.gameList);
 
       }
@@ -44,7 +44,7 @@ gameSchema.pre('save', function(done){
 
 gameSchema.pre('findOne', function(done){
   this.populate({
-    path: 'platform',
+    path: 'platforms',
     populate: {
       path: 'gameList',
       populate: {

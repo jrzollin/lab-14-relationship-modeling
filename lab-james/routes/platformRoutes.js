@@ -7,6 +7,15 @@ const Platform = require('../models/platform.js');
 const platformRouter = module.exports = express.Router();
 
 platformRouter.post('/platforms', jsonParser, (req, res, next) => {
+
+  if(!req.body.name){
+    return(
+      res.writeHead(400),
+      res.write('Platform name required'),
+      res.end()
+    );
+  }
+
   let newPlatform = new Platform(req.body);
 
   newPlatform.save()
@@ -30,13 +39,24 @@ platformRouter.get('/platforms', (req, res, next) => {
 
 platformRouter.get('/platforms/:id', (req, res, next) => {
   let id = req.params.id;
+  if(!id){
+    return(
+      res.writeHead(400),
+      res.write('ID required'),
+      res.end()
+    );
+  }
 
   Platform.findOne({_id: id})
     .then(platform => {
       res.send(platform);
     })
-    .catch(err => {
-      next(err);
+    .catch( () => {
+      return(
+        res.writeHead(404),
+        res.write('platform ID not found'),
+        res.end()
+      );
     });
 });
 
@@ -47,7 +67,19 @@ platformRouter.delete('/platforms/:id', (req, res, next) => {
     .then( () => {
       res.send('Platform deleted');
     })
-    .catch(err => {
-      next(err);
+    .catch( () => {
+      return(
+        res.writeHead(404),
+        res.write('platform not found'),
+        res.end()
+      );
     });
+});
+
+platformRouter.delete('/platforms', (req, res, next) => {
+  return(
+    res.writeHead(400),
+    res.write('ID required'),
+    res.end()
+  );
 });
